@@ -8,7 +8,7 @@ public class NetworkMoveObject : MonoBehaviour {
 	}
 
 	void Update () {
-		if (Network.isServer)
+		if (GetComponent<NetworkView>().isMine)
 		{
 			Vector3 moveDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 			float speed = 5;
