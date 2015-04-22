@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class MultiplayerNetwork : MonoBehaviour {
@@ -7,10 +8,16 @@ public class MultiplayerNetwork : MonoBehaviour {
 	public int connectionPort;
 	
 	void Start(){
-		connectionIP = "192.168.0.13";
+		//connectionIP = "192.168.0.13";
 		connectionPort = 25001;
+
 	}
-	
+
+	void Awake()
+	{
+		DontDestroyOnLoad(this.gameObject);
+	}
+
 	void Update () {
 	
 	}
@@ -21,9 +28,16 @@ public class MultiplayerNetwork : MonoBehaviour {
 		}
 	}
 
-	public void JoinGame(){
-		if (Network.peerType == NetworkPeerType.Disconnected){
-			Network.Connect(connectionIP, connectionPort);
+	public void JoinGame(InputField inputField){
+		if (Network.peerType == NetworkPeerType.Disconnected)
+		{
+			if(inputField.text.Length != 0)
+			{
+			Network.Connect(inputField.text, connectionPort);
+			}
+			else{
+				Debug.Log("Given IP: " + inputField.text);
+			}
 		}
 	}
 
@@ -32,5 +46,11 @@ public class MultiplayerNetwork : MonoBehaviour {
 			Network.Disconnect(200);
 		}
 	}
-	
+
+	void OnConnectedToServer(){
+		Debug.Log("Valid IP! :D");
+		ButtonLoadLevel loader = GameObject.Find("LoadLevel").GetComponent<ButtonLoadLevel>();
+		loader.LoadLevelButton(3);
+	}
+
 }
